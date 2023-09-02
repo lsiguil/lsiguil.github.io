@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Desarrollo Web</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444;
+            padding: 10px;
+            text-align: center;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 10px;
+            }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .product {
+            text-align: center;
+            margin: 20px;
+        }
+
+            .product img {
+                width: 200px;
+                height: 200px;
+                margin: 10px;
+                cursor: pointer;
+            }
+
+        .cart {
+            background-color: #f2f2f2;
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #cart-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Proyecto Desarrollo Web</h1>
+        <p>Este es un sitio de ejemplo de una tienda en linea de libros fisicos</p>
+        <p>Creado por: Luis Roberto Siguil Lemus Carnet: 0900-18-13525</p>
+    </header>
+    <nav>
+        <a href="Pagina Inicial.html">Inicio</a>
+         <a href="Carrito_Compras.html">Carrito de Compras</a>
+    </nav>
+    <div class="container">
+       
+        <div class="product">
+            <img src="product1.jpg" alt="Product 1" draggable="true" ondragstart="drag(event)" data-product="Product 1" data-price="200">
+            <h3>EL PODER DEL PENSAMIENTO POSITIVO</h3>
+            <p>
+                El PENSAMIENTO POSITIVO es definido por Remez Sasson como una ACTITUD MENTAL que admite en la mente pensamientos,
+                palabras e imágenes que son conductivas al CRECIMIENTO ,EXPANCIÓN Y ÉXITO.
+            </p>
+        </div>
+        <div class="product">
+            <img src="product2.jpg" alt="Product 2" draggable="true" ondragstart="drag(event)" data-product="Product 2" data-price="200">
+            <h3>EL PODER DE CREER EN TI</h3>
+            <p>
+                La confianza en uno mismo es quizás el factor más importante a la hora de alcanzar verdadera felicidad, paz interior y satisfacción en la vida.
+                En El poder de creer en ti descubrirás una guía práctica y amena que te ayudará a aumentar tu confianza y autoestima de forma rápida a través
+                de 9 sencillos pasos fáciles de aplicar y mantener.
+            </p>
+        </div>
+        <div class="shopping-cart" ondragover="allowDrop(event)" ondrop="addToCart(event)">
+            <h5> Arrastra los productos que quieras agregar al carrito de compras</h5>
+                <h3>CARRITO DE COMPRAS</h3>
+
+                <ul id="cart-list">
+                   
+                </ul>
+</div>
+    </div>
+    <script>
+       
+        const shoppingCart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+
+       
+        function startDrag(event) {
+            event.dataTransfer.setData('text/plain', event.target.src);
+        }
+
+       
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+       
+        function addToCart(event) {
+            event.preventDefault();
+            const imageSrc = event.dataTransfer.getData('text/plain');
+            const productName = event.target.parentElement.querySelector('h3').textContent;
+
+                   const existingProduct = shoppingCart.find(item => item.name === productName);
+
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                shoppingCart.push({
+                    name: productName,
+                    image: imageSrc,
+                    quantity: 1,
+                    price: 200 
+                });
+            }
+
+           
+            updateCart();
+           
+            localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+        }
+
+       
+        function updateCart() {
+            const cartList = document.getElementById('cart-list');
+            cartList.innerHTML = '';
+
+            shoppingCart.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${item.name} (Cantidad: ${item.quantity}) - Total: Q ${item.quantity * item.price}`;
+
+                const productImage = document.createElement('img');
+                productImage.src = item.image;
+                productImage.style.width = '50px';
+                productImage.style.height = '50px';
+
+                listItem.insertBefore(productImage, listItem.firstChild);
+                cartList.appendChild(listItem);
+            });
+        }
+
+       
+        updateCart();
+    </script>
+</body>
+</html>

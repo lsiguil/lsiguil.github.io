@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444;
+            padding: 10px;
+            text-align: center;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 10px;
+            }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cart {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .cart-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .country {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Shopping Cart</h1>
+        <p>Review your products and delivery information</p>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="product1.html">Product 1</a>
+        <a href="confirmacion.html">confirmacion</a>
+    </nav>
+    <div class="container">
+        <h2>Your Shopping Cart</h2>
+        <div class="cart">
+            <ul class="cart-list">
+                <li>Product 1 - $20</li>
+                <li>Product 2 - $30</li>
+            </ul>
+        </div>
+        <div class="country">
+            <h3>Delivery Country</h3>
+            <p id="country-info">Detecting your location...</p>
+        </div>
+    </div>
+
+    <script>
+        // Get user's geolocation and display the country
+        function showCountry() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    fetch(`https://geocode.xyz/${latitude},${longitude}?json=1`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const country = data.country;
+                            document.getElementById("country-info").textContent = `Your location: ${country}`;
+                        })
+                        .catch(error => {
+                            console.error("Error fetching location data:", error);
+                            document.getElementById("country-info").textContent = "Location data unavailable";
+                        });
+                });
+            } else {
+                document.getElementById("country-info").textContent = "Geolocation is not supported by your browser.";
+            }
+        }
+
+        // Call the function to show the country information
+        showCountry();
+    </script>
+</body>
+</html>

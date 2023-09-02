@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Desarrollo Web</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #444;
+            padding: 10px;
+            text-align: center;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 10px;
+            }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cart {
+            margin: 20px;
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .cart-table th, .cart-table td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: center;
+            }
+
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Proyecto Desarrollo Web</h1>
+        <p>Este es un sitio de ejemplo de una tienda en linea de libros fisicos</p>
+        <p>Creado por: Luis Roberto Siguil Lemus Carnet: 0900-18-13525</p>
+    </header>
+    <nav>
+        <a href="Pagina Inicial.html">Inicio</a>
+        
+    </nav>
+    <div class="container">
+        <h2>Detalle Carrito de Compras</h2>
+        <div class="cart">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acccion</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                   
+                </tbody>
+            </table>
+            <div class="total" id="cart-total">
+                Total: Q 0
+            </div>
+        </div>
+        <div class="confirmation">
+            <h2>Confirmacion de orden</h2>
+            <p>Gracias por comprar con nosotros!</p>
+        </div>
+    </div>
+
+    <script>
+       
+        const cartItems = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+
+               const cartTable = document.getElementById("cart-items");
+        const cartTotal = document.getElementById("cart-total");
+
+        let totalPrice = 0;
+
+        cartItems.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>$${item.price}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price * item.quantity}</td>
+                    <td><button onclick="removeItem(${item.id})">Quitar</button></td>
+                `;
+            cartTable.appendChild(row);
+            totalPrice += item.price * item.quantity;
+        });
+
+        cartTotal.textContent = `Total: Q ${totalPrice.toFixed(2)}`;
+
+       
+        function removeItem(itemId) {
+            const updatedCart = cartItems.filter(item => item.id !== itemId);
+            localStorage.setItem('shoppingCart', JSON.stringify(updatedCart));
+            location.reload(); 
+        }
+    </script>
+</body>
+</html>
+
